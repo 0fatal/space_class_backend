@@ -11,7 +11,7 @@ app.use(cors())
 const router = express.Router()
 initRouter(router)
 
-app.use('/', router)
+app.use('/class', router)
 
 // 这里一般不用改
 

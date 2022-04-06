@@ -2,13 +2,18 @@ const mysql = require('mysql')
 const dbConfig = require('./config')
 const promisify = require('util').promisify
 
-const db = mysql.createConnection(dbConfig)
+const db = require('knex')({
+    client: 'mysql',
+    connection: {
+        host : dbConfig.host,
+        port : dbConfig.port,
+        user : dbConfig.user,
+        password : dbConfig.password,
+        database : dbConfig.database
+    }
+});
 
-function dbQuery(syntax, ...arg) {
-    return promisify(db.query)(syntax, arg)
-}
 
 module.exports = {
-    conn,
-    dbQuery,
+    conn:db,
 }
