@@ -4,7 +4,7 @@
     "description": "",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
         "start": "node main.js"
     },
     "keywords": [],
@@ -17,5 +17,8 @@
         "knex": "^1.0.5",
         "mysql2": "^2.3.3",
         "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "jest": "^27.5.1"
     }
 }

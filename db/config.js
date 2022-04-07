@@ -1,7 +1,7 @@
 module.exports = {
     host: '121.36.224.18',
-    port: '23333',
+    port: 22223,
     user: 'root',
-    password: 'root23333',
+    password: 'root22223',
     database: 'blue_dev',
 }

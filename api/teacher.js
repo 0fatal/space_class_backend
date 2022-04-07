@@ -4,6 +4,7 @@ const getTeacherInfo = async (teacherId) => {
     return res
 }
 
+
 module.exports = {
     getTeacherInfo
 }

@@ -1,9 +1,9 @@
-const mysql = require('mysql')
+const mysql = require('mysql2')
 const dbConfig = require('./config')
-const promisify = require('util').promisify
+// const promisify = require('util').promisify
 
 const db = require('knex')({
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
         host : dbConfig.host,
         port : dbConfig.port,
@@ -12,6 +12,8 @@ const db = require('knex')({
         database : dbConfig.database
     }
 });
+
+console.log(db)
 
 
 module.exports = {

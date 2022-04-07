@@ -22,15 +22,18 @@ async function findUserByStaffID(staffID) {
  */
 
 const createClass = async (classInfo) => {
+    console.log(1111)
     const res = await conn('class').insert({
         id: uniqueId(),
         name: classInfo.name,
         intro: classInfo.intro,
         teacher_id: classInfo.teacher_id
     })
-    return
+
+    return true
 }
 
 module.exports = {
     findUserByStaffID,
+    createClass
 }
