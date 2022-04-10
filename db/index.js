@@ -1,7 +1,6 @@
-const mysql = require('mysql2')
 const dbConfig = require('./config')
 // const promisify = require('util').promisify
-
+//
 const db = require('knex')({
     client: 'mysql2',
     connection: {

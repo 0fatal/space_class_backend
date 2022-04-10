@@ -10,6 +10,8 @@ const getStudentInfo = async(staffId) => {
     return res
 }
 
+
 module.exports = {
-    isStudent
+    isStudent,
+    getStudentInfo
 }

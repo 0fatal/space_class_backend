@@ -21,19 +21,53 @@ async function findUserByStaffID(staffID) {
  * }
  */
 
+function get db() { return conn('class')}
+
 const createClass = async (classInfo) => {
-    console.log(1111)
-    const res = await conn('class').insert({
+    const res = await db.insert({
         id: uniqueId(),
         name: classInfo.name,
         intro: classInfo.intro,
         teacher_id: classInfo.teacher_id
     })
-
     return true
+}
+
+const getTeacherClassList = async (teacherId) => {
+    const res = await db.select().where({
+        teacher_id: teacherId
+    })
+    return res
+}
+
+const getMyClass = async (studentId) => {
+    const {classId} = await conn('student').select('class_id').where(
+        {'staff_id': studentId}
+    )
+
+    const res =  await db.select().where({
+        'id': classId
+    })
+
+    return res
+}
+
+const getClassList = async() => {
+    const res = await conn('class').select()
+    return res
+}
+
+const getClassInfo = async(classId) =>  {
+    const res = await conn('class').first(classId)
+    return res
 }
 
 module.exports = {
     findUserByStaffID,
-    createClass
+    createClass,
+    getMyClass,
+    getTeacherClassList,
+    getClassList,
+    getClassInfo,
+    getClassInfo
 }
