@@ -1,4 +1,7 @@
 const ResourceService = require('../service/resource')
+const {R} = require('../dto/response');
+const {getStaffId} = require("../utils");
+
 
 /**
  * 获取班级资源列表
@@ -7,7 +10,14 @@ const ResourceService = require('../service/resource')
  * @returns {Promise<void>}
  */
 const getResourceList = async (req,res) => {
-    const data = await ResourceService.getResourceList(req.body.class_id)
+    const { class_id } = req.body
+    const data = await ResourceService.getResourceList(class_id)
+    R.success(data).send(res)
+}
+
+const getResourceDetail = async (req,res) => {
+    const { id: resource_id } = req.params
+    const data = await ResourceService.getResourceDetail(resource_id)
     R.success(data).send(res)
 }
 
@@ -18,14 +28,19 @@ const getResourceList = async (req,res) => {
  * @returns {Promise<void>}
  */
 const createResource = async(req,res) => {
-    const { name,content,creator_id, class_id} = req.body
-    await ResourceService.createResource({
+    const { name,content, class_id} = req.body
+    const creator_id = getStaffId(req)
+    const ok = await ResourceService.createResource({
         name:name,
         content: content,
         creatorId: creator_id,
         classId: class_id
     })
-    R.success().send(res)
+    if(ok) {
+        R.success().send(res)
+    } else {
+        R.fail().send(res)
+    }
 }
 
 /**
@@ -35,11 +50,17 @@ const createResource = async(req,res) => {
  * @returns {Promise<void>}
  */
 const deleteResource = async(req,res) => {
-    await ResourceService.deleteResource()
-    R.success().send(res)
+    const { resource_id: resourceId } = req.body
+    const ok = await ResourceService.deleteResource(resourceId)
+    if(ok) {
+        R.success().send(res)
+    } else {
+        R.fail().send(res)
+    }
 }
 
 module.exports = {
+    getResourceDetail,
     getResourceList,
     createResource,
     deleteResource

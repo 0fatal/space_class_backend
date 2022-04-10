@@ -6,7 +6,7 @@ const {conn} = require("../db");
 const getTeacherInfo = async(staffId) => {
     const teacher =  await conn('teacher').where({
         staff_id: staffId
-    }).select()
+    }).first()
     console.log('teacher',teacher)
     return teacher
 }
@@ -17,7 +17,7 @@ const getTeacherInfo = async(staffId) => {
  * @returns {Promise<boolean>}
  */
 const isTeacher = async (staffId) => {
-    return !!(await getTeacherInfo())
+    return !!(await getTeacherInfo(staffId))
 }
 
 module.exports = {

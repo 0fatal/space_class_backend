@@ -20,7 +20,7 @@ const getResourceList = async (classId) => {
  * @returns {Promise<awaited Knex.QueryBuilder<TRecord, ArrayIfAlready<DeferredKeySelection.AddUnionMember<UnwrapArrayMember<TResult>, undefined>, DeferredKeySelection<TRecord, string>>>>}
  */
 const getResourceDetail = async (resourceId) => {
-    const res = await conn('class_resource').first(resourceId)
+    const res = await conn('class_resource').where({id: resourceId}).first()
     return res
 }
 

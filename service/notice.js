@@ -8,7 +8,7 @@ const getNoticeList = async (classId) => {
 }
 
 const getNoticeDetail = async (noticeId) => {
-    const res = await conn('class_notice').first(noticeId)
+    const res = await conn('class_notice').where({id: noticeId}).first()
     return res
 }
 
@@ -27,8 +27,8 @@ const createNotice = async ({title,content, creatorId,classId}) => {
 
 
 const deleteNotice = async(noticeId) => {
-    await conn('class_notice').where({id: noticeId}).delete()
-    return true
+    const count = await conn('class_notice').where({id: noticeId}).delete()
+    return count > 0
 }
 
 module.exports = {

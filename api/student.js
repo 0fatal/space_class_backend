@@ -1,7 +1,16 @@
 const StudentService = require('../service/student')
-const {getStaffId} = require("../utils");
-const getStudentList = () => {
+const {R} = require('../dto/response');
 
+/**
+ * 获取学生列表
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+const getStudentList = async(req,res) => {
+    const {class_id} = req.body
+    const data = (await StudentService.getStudentList(class_id))
+    R.success(data).send(res)
 }
 
 /**

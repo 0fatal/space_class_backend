@@ -1,30 +1,15 @@
-const { dbQuery, conn} = require('../db')
+const {  conn} = require('../db')
 const {uniqueId} = require("../utils");
 
-async function findUserByStaffID(staffID) {
-    try {
-        return await dbQuery('SELECT * FROM user WHERE staffID = ?', staffID)
-    } catch (err) {
-        console.log(err)
-        throw err
-    }
-}
+
 
 /**
  * createClass 创建班级
- *
- * @param object classInfo
- * {
- *     name: string,
- *     intro: string,
- *     teacher_id: string
- * }
+ * @param classInfo
+ * @returns {Promise<boolean>}
  */
-
-function get db() { return conn('class')}
-
 const createClass = async (classInfo) => {
-    const res = await db.insert({
+    const res = await conn('class').insert({
         id: uniqueId(),
         name: classInfo.name,
         intro: classInfo.intro,
@@ -33,41 +18,80 @@ const createClass = async (classInfo) => {
     return true
 }
 
+/**
+ * getClassList 获取老师班级列表
+ * @param teacher_id
+ * @returns {Promise<*>}
+ */
 const getTeacherClassList = async (teacherId) => {
-    const res = await db.select().where({
+    const res = await conn('class').select().where({
         teacher_id: teacherId
     })
     return res
 }
 
-const getMyClass = async (studentId) => {
-    const {classId} = await conn('student').select('class_id').where(
-        {'staff_id': studentId}
-    )
 
-    const res =  await db.select().where({
-        'id': classId
-    })
+/**
+ * getMyClass 获取我的班级
+ * @param studentId
+ * @returns {Promise<awaited Knex.QueryBuilder<TRecord, TResult>>}
+ */
+const getMyClass = async (studentId) => {
+    const {class_id} = await conn('student').select('class_id').where(
+        {'staff_id': studentId}
+    ).first()
+
+    console.log(class_id)
+    if(!class_id) return null
+
+    const res =  await conn('class').where({
+        'id': class_id
+    }).first()
 
     return res
 }
 
+
+/**
+ * 获取班级列表
+ * @returns {Promise<awaited Knex.QueryBuilder<TRecord, TResult>>}
+ */
 const getClassList = async() => {
     const res = await conn('class').select()
     return res
 }
 
+/**
+ * 获取班级详情
+ * @param classId
+ * @returns {Promise<awaited Knex.QueryBuilder<TRecord, ArrayIfAlready<DeferredKeySelection.AddUnionMember<UnwrapArrayMember<TResult>, undefined>, DeferredKeySelection<TRecord, string>>>>}
+ */
 const getClassInfo = async(classId) =>  {
-    const res = await conn('class').first(classId)
+    const res = await conn('class').where({
+        id: classId
+    }).first()
     return res
 }
 
+/**
+ * 更新班级信息
+ * @param classId
+ * @returns {Promise<*>}
+ */
+const updateClassInfo = async(classId, teacherId, { name, intro}) => {
+    const res = await conn('class').where({id: classId, teacher_id: teacherId}).update({
+        name: name,
+        intro: intro,
+    })
+    console.log('updateClassInfo', res)
+    return res > 0
+}
+
 module.exports = {
-    findUserByStaffID,
     createClass,
     getMyClass,
     getTeacherClassList,
     getClassList,
     getClassInfo,
-    getClassInfo
+    updateClassInfo
 }

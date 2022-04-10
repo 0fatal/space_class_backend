@@ -25,15 +25,13 @@ class R {
         })
     }
 
-
-
     send(res) {
-        res.body = {
+        res.send({
             code: this.code,
             msg: this.msg,
             data: this.data
-        }
+        })
     }
-
-
 }
+
+module.exports.R = R

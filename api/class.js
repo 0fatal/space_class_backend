@@ -1,9 +1,10 @@
 const ClassService = require('../service/class')
 const {getStaffId} = require("../utils");
+const {R} = require('../dto/response');
 
 const getClassList = async(req,res) => {
     const data =  await ClassService.getClassList()
-    res.success(data).send(res)
+    R.success(data).send(res)
 }
 
 const getMyClass = async(req,res) => {
@@ -13,8 +14,8 @@ const getMyClass = async(req,res) => {
 
 const getClassInfo = async(req,res) => {
     const classId = req.params['id']
-    const re = await ClassService.getClassInfo(classId)
-    res.send(re)
+    const data = await ClassService.getClassInfo(classId)
+    R.success(data).send(res)
 }
 
 const createClass = async(req,res) => {
@@ -24,7 +25,6 @@ const createClass = async(req,res) => {
             name: name,
             intro: intro,
             teacher_id: getStaffId(req)
-
         })
         R.success().send(res)
     }catch(e) {
@@ -37,8 +37,18 @@ const getTeacherClassList = async (req,res) => {
     R.success(data).send(res)
 }
 
-const updateClassInfo = (req,res) => {
-
+const updateClassInfo = async (req,res) => {
+    const { class_id, name, intro } = req.body
+    const teacher_id = getStaffId(req)
+    const data = await ClassService.updateClassInfo(class_id, teacher_id,{
+        name: name,
+        intro: intro
+    })
+    if(data) {
+        R.success().send(res)
+    } else {
+        R.fail().send(res)
+    }
 }
 
 
