@@ -21,7 +21,7 @@ module.exports = {
         r.get('/profile/info', UserApi.getUserInfo) // 获取个人信息
         {
             r.get('/class/list', ClassApi.getClassList) // 获取全部班级列表
-            r.get('/class/', ClassApi.getMyClass) // 获取自己的班级
+            r.get('/class/', ClassApi.getMyClass,AuthMiddleware.NeedStudent) // 获取自己的班级
             r.get('/class/info/:id',ClassApi.getClassInfo) // 获取班级信息
             r.post('/class/info/update',ClassApi.updateClassInfo,AuthMiddleware.NeedTeacher)  // 更新班级信息
             r.post('/class/dismiss',ClassApi.dismissClass,AuthMiddleware.NeedTeacher) // 解散班级
@@ -51,7 +51,7 @@ module.exports = {
         {
             r.post('/notice/create', NoticeApi.createNotice,AuthMiddleware.NeedTeacher) // 发起通知
             r.post('/notice/delete', NoticeApi.deleteNotice,AuthMiddleware.NeedTeacher) // 删除通知
-            r.get('/notice/detail/:id', NoticeApi.getNoticeDetail) // 删除通知详情
+            r.get('/notice/detail/:id', NoticeApi.getNoticeDetail) // 通知详情
             r.post('/notice/list',NoticeApi.getNoticeList) // 获取通知列表
         }
 

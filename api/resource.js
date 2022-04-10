@@ -51,7 +51,8 @@ const createResource = async(req,res) => {
  */
 const deleteResource = async(req,res) => {
     const { resource_id: resourceId } = req.body
-    const ok = await ResourceService.deleteResource(resourceId)
+    const staffId = getStaffId(req)
+    const ok = await ResourceService.deleteResource(resourceId,staffId)
     if(ok) {
         R.success().send(res)
     } else {

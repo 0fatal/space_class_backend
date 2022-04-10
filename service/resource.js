@@ -1,5 +1,6 @@
 const {uniqueId} = require("../utils");
 const {conn} = require("../db");
+const {isTeacher} = require("./teacher");
 
 /**
  * 获取班级资源列表
@@ -48,9 +49,15 @@ const createResource = async ({name,content, creatorId,classId}) => {
 
 
 
-const deleteResource = async(resourceId) => {
-    await conn('class_resource').where({id: resourceId}).delete()
-    return true
+const deleteResource = async(resourceId,staffId) => {
+    let count
+    if((await isTeacher(staffId))) {
+        count = await conn('class_resource').where({id: resourceId}).delete()
+    } else {
+        count = await conn('class_resource').where({id: resourceId,creator_id: staffId}).delete()
+    }
+
+    return count > 0
 }
 
 module.exports = {

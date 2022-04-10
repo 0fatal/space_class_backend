@@ -55,14 +55,14 @@ const updateClassInfo = async (req,res) => {
 
 const dismissClass = (req,res) => {
     const {class_id} = req.body
-    ClassService.dismissClass(class_id).then(data => {
-        if(data) {
+    const teacherId = getStaffId(req)
+
+    ClassService.dismissClass(class_id,teacherId).then(ok => {
+        if(ok) {
             R.success().send(res)
         } else {
             R.fail().send(res)
         }
-    }).catch(err => {
-        R.fail(err).send(res)
     })
 }
 

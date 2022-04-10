@@ -92,9 +92,10 @@ const updateClassInfo = async(classId, teacherId, { name, intro}) => {
  * @param classId
  * @returns {Promise<boolean>}
  */
-const dismissClass = async(classId) => {
+const dismissClass = async(classId,teacherId) => {
     const res = await conn('class').where({
-        id: classId
+        id: classId,
+        teacher_id: teacherId
     }).del()
     return res > 0
 }

@@ -81,7 +81,8 @@ const ignoreApply = async(req,res) => {
 
 const removeStudent = (req,res) => {
     const {class_id,staff_id} = req.body
-    ManageService.removeStudent(class_id,staff_id).then(ok => {
+    const teacherId = getStaffId(req)
+    ManageService.removeStudent(class_id,staff_id,teacherId).then(ok => {
         if(ok) {
             R.success().send(res)
         } else {
