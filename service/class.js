@@ -9,7 +9,7 @@ const {uniqueId} = require("../utils");
  * @returns {Promise<boolean>}
  */
 const createClass = async (classInfo) => {
-    const res = await conn('class').insert({
+    await conn('class').insert({
         id: uniqueId(),
         name: classInfo.name,
         intro: classInfo.intro,
@@ -87,11 +87,24 @@ const updateClassInfo = async(classId, teacherId, { name, intro}) => {
     return res > 0
 }
 
+/**
+ * 解散班级
+ * @param classId
+ * @returns {Promise<boolean>}
+ */
+const dismissClass = async(classId) => {
+    const res = await conn('class').where({
+        id: classId
+    }).del()
+    return res > 0
+}
+
 module.exports = {
     createClass,
     getMyClass,
     getTeacherClassList,
     getClassList,
     getClassInfo,
-    updateClassInfo
+    updateClassInfo,
+    dismissClass
 }

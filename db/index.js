@@ -12,7 +12,6 @@ const db = require('knex')({
     }
 });
 
-console.log(db)
 
 
 module.exports = {

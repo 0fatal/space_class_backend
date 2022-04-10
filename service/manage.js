@@ -1,4 +1,5 @@
 const {conn} = require("../db");
+const {uniqueId} = require("../utils");
 
 /**
  * 获取申请列表
@@ -24,7 +25,8 @@ const createApply = async ({classId, staffId, type,reason}) => {
         class_id: classId,
         staff_id: staffId,
         type: type,
-        reason: reason
+        reason: reason,
+        id: uniqueId()
     })
     return true
 }
@@ -35,10 +37,10 @@ const createApply = async ({classId, staffId, type,reason}) => {
  * @returns {Promise<boolean>}
  */
 const deleteApply = async (applyId) => {
-    await conn('class_apply').where({
+    const count = await conn('class_apply').where({
         id: applyId
     }).del()
-    return true
+    return count > 0
 }
 
 /**
@@ -99,17 +101,7 @@ const removeStudent = async(classId, staffId) => {
     return res > 0
 }
 
-/**
- * 解散班级
- * @param classId
- * @returns {Promise<boolean>}
- */
-const dismissClass = async(classId) => {
-    const res = await conn('class').where({
-        id: classId
-    }).del()
-    return res > 0
-}
+
 
 module.exports = {
     getApplyList,
@@ -119,5 +111,4 @@ module.exports = {
     agreeApply,
     ignoreApply,
     removeStudent,
-    dismissClass
 }

@@ -1,9 +1,10 @@
 const ManageService = require('../service/manage');
 const {R} = require('../dto/response');
+const {getStaffId} = require("../utils");
 
 const rejectApply = async(req,res) => {
-    const {id} = req.body
-    const data = await ManageService.rejectApply(id)
+    const {apply_id} = req.body
+    const data = await ManageService.rejectApply(apply_id)
     if(data) {
         R.success().send(res)
     } else {
@@ -12,12 +13,44 @@ const rejectApply = async(req,res) => {
 
 }
 
+const createJoinApply = async(req,res) => {
+    const { class_id,  reason } = req.body
+    const staff_id = getStaffId(req)
+    const ok = await ManageService.createApply({
+        classId: class_id,
+        type: 0,
+        reason,
+        staffId: staff_id
+    })
+    if(ok) {
+        R.success().send(res)
+    } else {
+        R.fail().send(res)
+    }
+}
+
+const createLeaveApply = async(req,res) => {
+    const { class_id,  reason } = req.body
+    const staff_id = getStaffId(req)
+    const ok = await ManageService.createApply({
+        classId: class_id,
+        type: 1,
+        reason,
+        staffId: staff_id
+    })
+    if(ok) {
+        R.success().send(res)
+    } else {
+        R.fail().send(res)
+    }
+}
+
 
 const listApply = (req,res) => {
     const {class_id} = req.body
     ManageService.getApplyList(class_id).then(data => {
         if(data) {
-            R.success().send(res)
+            R.success(data).send(res)
         } else {
             R.fail().send(res)
         }
@@ -27,9 +60,9 @@ const listApply = (req,res) => {
 }
 
 const agreeApply = async(req,res) => {
-    const {id} = req.body
-    const data = await ManageService.agreeApply(id)
-    if(data) {
+    const {apply_id} = req.body
+    const ok = await ManageService.agreeApply(apply_id)
+    if(ok) {
         R.success().send(res)
     } else {
         R.fail().send(res)
@@ -37,9 +70,9 @@ const agreeApply = async(req,res) => {
 }
 
 const ignoreApply = async(req,res) => {
-    const {id} = req.body
-    const data = await ManageService.ignoreApply(id)
-    if(data) {
+    const {apply_id} = req.body
+    const ok = await ManageService.ignoreApply(apply_id)
+    if(ok) {
         R.success().send(res)
     } else {
         R.fail().send(res)
@@ -48,8 +81,8 @@ const ignoreApply = async(req,res) => {
 
 const removeStudent = (req,res) => {
     const {class_id,staff_id} = req.body
-    ManageService.removeStudent(class_id,staff_id).then(data => {
-        if(data) {
+    ManageService.removeStudent(class_id,staff_id).then(ok => {
+        if(ok) {
             R.success().send(res)
         } else {
             R.fail().send(res)
@@ -59,19 +92,7 @@ const removeStudent = (req,res) => {
     })
 }
 
-const dismissClass = (req,res) => {
-    const {class_id} = req.body
-    ManageService.dismissClass(class_id).then(data => {
 
-        if(data) {
-            R.success().send(res)
-        } else {
-            R.fail().send(res)
-        }
-    }).catch(err => {
-        R.fail(err).send(res)
-    })
-}
 
 module.exports = {
     rejectApply,
@@ -79,6 +100,7 @@ module.exports = {
     agreeApply,
     ignoreApply,
     removeStudent,
-    dismissClass
+    createJoinApply,
+    createLeaveApply
 }
 
