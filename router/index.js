@@ -9,12 +9,11 @@ const NoticeApi = require('../api/notice')
 const UserApi = require('../api/user')
 
 const AuthMiddleware = require('../middleware/auth')
-const ExceptionFallbackMiddleware = require('../middleware/exception')
 
 module.exports = {
     initRouter(r) {
-        r.use(ExceptionFallbackMiddleware) // 异常处理中间价
         r.use(AuthMiddleware.NeedAuth) // 鉴权中间件
+
         // r.get('/ping', PingApi.ping)
 
         r.get('/profile/info', UserApi.getUserInfo) // 获取个人信息

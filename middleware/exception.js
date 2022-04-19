@@ -1,12 +1,13 @@
-const {R} = require('../dto/response');
+const { R } = require('../dto/response')
 
-const ExceptionFallbackMiddleware = (req, res, next) => {
-  try {
-    next()
-  }catch (e){
-    console.log(e)
-    R.fail().send(res)
-  }
-};
+const ExceptionFallbackMiddleware = (err, req, res, next) => {
+    // try {
+    //     return next()
+    // } catch (e) {
+    //     console.log(11111111)
+    console.log(err, 11111)
+    R.fail(err.message).send(res)
+    // }
+}
 
-module.exports = ExceptionFallbackMiddleware;
+module.exports = ExceptionFallbackMiddleware
