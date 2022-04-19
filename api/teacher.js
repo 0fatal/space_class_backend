@@ -1,6 +1,5 @@
 const TeacherService = require('../service/teacher')
-const {R} = require('../dto/response');
-
+const { R } = require('../dto/response')
 
 /**
  * 获取老师信息
@@ -8,14 +7,12 @@ const {R} = require('../dto/response');
  * @param res
  * @returns {Promise<void>}
  */
-const getTeacherInfo = async (req,res) => {
-    const teacherId = req.params['id']
+const getTeacherInfo = async (req, res) => {
+    const teacherId = req.body['staff_id']
     const data = await TeacherService.getTeacherInfo(teacherId)
     R.success(data).send(res)
 }
 
-
 module.exports = {
     getTeacherInfo,
 }
-
